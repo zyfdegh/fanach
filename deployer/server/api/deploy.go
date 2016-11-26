@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/zyfdegh/fanach/deployer/server/entity"
 	"github.com/zyfdegh/fanach/deployer/server/service"
@@ -13,7 +14,12 @@ import (
 
 // GetRoot serves index.html
 func GetRoot(w http.ResponseWriter, req *http.Request) {
-	http.ServeFile(w, req, "static/html/index.html")
+	homepage := "static/html/index.html"
+	if _, err := os.Stat(homepage); err != nil {
+		log.Printf("stat homepage error: %s", err)
+		return
+	}
+	http.ServeFile(w, req, homepage)
 }
 
 // PostDeploy starts deployment

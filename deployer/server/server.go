@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-const port = 9861
+const port = 8080
 
 // Start launches http server
 func Start() {
