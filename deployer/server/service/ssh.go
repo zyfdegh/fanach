@@ -8,6 +8,13 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+// SSHConfig is a wrapper of ClientConfig, with host and port
+type SSHConfig struct {
+	Host         string
+	Port         string
+	ClientConfig *ssh.ClientConfig
+}
+
 func keyConfig(user, key string) *ssh.ClientConfig {
 	signer, err := ssh.ParsePrivateKey([]byte(key))
 	if err != nil {
@@ -31,8 +38,8 @@ func passwdConfig(user, password string) *ssh.ClientConfig {
 	}
 }
 
-func executeCmd(config *ssh.ClientConfig, host, port, cmd string) (output string) {
-	client, err := ssh.Dial("tcp", fmt.Sprintf("%s:%s", host, port), config)
+func executeRemote(c *SSHConfig, cmd string) (output string, err error) {
+	client, err := ssh.Dial("tcp", fmt.Sprintf("%s:%s", c.Host, c.Port), c.ClientConfig)
 	if err != nil {
 		log.Printf("ssh dial error: %v", err)
 		return
@@ -53,7 +60,7 @@ func executeCmd(config *ssh.ClientConfig, host, port, cmd string) (output string
 		log.Printf("run cmd error: %v", err)
 		return
 	}
-	return b.String()
+	return b.String(), nil
 }
 
 func scp(config *ssh.ClientConfig, host, port, src, dest string) {
