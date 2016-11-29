@@ -24,3 +24,12 @@ func handleDeploy(w http.ResponseWriter, req *http.Request) {
 		io.WriteString(w, "method not allowed")
 	}
 }
+
+func handleTest(w http.ResponseWriter, req *http.Request) {
+	switch req.Method {
+	case http.MethodPost:
+		api.PostTest(w, req)
+	default:
+		io.WriteString(w, "method not allowed")
+	}
+}

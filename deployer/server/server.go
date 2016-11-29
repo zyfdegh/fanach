@@ -11,6 +11,7 @@ const port = 8080
 // Start launches http server
 func Start() {
 	http.HandleFunc("/", handleRoot)
+	http.HandleFunc("/test", handleTest)
 	http.HandleFunc("/deploy", handleDeploy)
 
 	s := &http.Server{Addr: fmt.Sprintf(":%d", port)}
