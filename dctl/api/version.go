@@ -11,14 +11,10 @@ import (
 
 // GetVersion queries version of docker on host machine
 func GetVersion(w http.ResponseWriter, r *http.Request) {
-	resp, err := service.Version()
-	if err != nil {
-		log.Printf("serve deploy error: %v", err)
-		return
-	}
+	resp, _ := service.Version()
 	body, err := json.Marshal(resp)
 	if err != nil {
-		log.Printf("marshal object error: %v", err)
+		log.Printf("marshal object error: %v\n", err)
 		return
 	}
 
