@@ -11,8 +11,6 @@ import (
 )
 
 const (
-	defaultMem    = 32
-	defaultCPU    = 0.01
 	defaultImage  = "zyfdedh/shadowsocks:latest"
 	defaultMethod = "aes-256-cfb"
 )
@@ -33,8 +31,6 @@ var (
 
 // DockerRun starts a new ss container
 func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
-	// Example docker run args
-	// docker run -d --restart=always -p 8393:8388 zyfdedh/shadowsocks:latest -s 0.0.0.0 -p 8388 -k dev123 -m aes-256-cfb
 	hostPort := req.HostPort
 	if len(strings.TrimSpace(hostPort)) == 0 {
 		resp.Errmsg = "hostPort not set"
@@ -48,26 +44,18 @@ func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
 		return
 	}
 
-	mem := req.Mem
-	if mem <= 0 {
-		log.Printf("mem invalid, using default %d\n", defaultMem)
-		mem = defaultMem
-	}
 	image := req.Image
 	if strings.TrimSpace(image) == "" {
 		log.Printf("image invalid, using default %s\n", defaultImage)
 		image = defaultImage
-	}
-	cpu := req.CPU
-	if cpu <= 0 {
-		log.Printf("cpu invalid, using default %f\n", defaultCPU)
-		cpu = defaultCPU
 	}
 	method := req.Method
 	if !util.StringInSlice(method, supportedMethods) {
 		log.Printf("unsupported method, using default %s\n", defaultMethod)
 		method = defaultMethod
 	}
+	mem := req.Mem
+	cpu := req.CPU
 
 	endpoint := "unix:///var/run/docker.sock"
 	client, err := docker.NewClient(endpoint)
