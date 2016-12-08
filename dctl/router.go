@@ -46,3 +46,13 @@ func handleDockerRun(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 }
+
+func handleDockerStats(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		api.GetDockerStats(w, r)
+	default:
+		io.WriteString(w, "method not allowed")
+	}
+	defer r.Body.Close()
+}

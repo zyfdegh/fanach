@@ -17,3 +17,9 @@ type RespPostRun struct {
 	Resp
 	ID string `json:"id"`
 }
+
+// RespGetStats is the response to GET /docker/stats
+type RespGetStats struct {
+	Resp
+	Stats
+}

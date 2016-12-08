@@ -19,6 +19,5 @@ func Version() (ver *docker.Env, err error) {
 		log.Printf("get docker version error: %v\n", err)
 		return
 	}
-	log.Println(ver)
 	return
 }

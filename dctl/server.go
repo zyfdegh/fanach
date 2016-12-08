@@ -13,6 +13,7 @@ func startServer() {
 	http.HandleFunc("/docker/version", handleDockerVersion)
 	http.HandleFunc("/docker/rm", handleDockerRm)
 	http.HandleFunc("/docker/run", handleDockerRun)
+	http.HandleFunc("/docker/stats", handleDockerStats)
 
 	s := &http.Server{Addr: fmt.Sprintf(":%d", port)}
 	log.Printf("server start on localhost:%d\n", port)
