@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -32,7 +33,7 @@ var (
 // DockerRun starts a new ss container
 func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
 	hostPort := req.HostPort
-	if len(strings.TrimSpace(hostPort)) == 0 {
+	if hostPort <= 0 {
 		resp.Errmsg = "hostPort not set"
 		resp.ErrNo = http.StatusBadRequest
 		return
@@ -72,7 +73,7 @@ func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
 			"8388/tcp": []docker.PortBinding{
 				docker.PortBinding{
 					HostIP:   "0.0.0.0",
-					HostPort: hostPort,
+					HostPort: fmt.Sprintf("%d", hostPort),
 				},
 			},
 		},
@@ -98,8 +99,10 @@ func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
 	}
 	err = client.StartContainer(container.ID, hostConfig)
 	if err != nil {
-		// rm created container
 		log.Printf("docker start container error: %v\n", err)
+		resp.Errmsg = err.Error()
+
+		// rm created container
 		log.Printf("remove container %s\n", container.ID)
 		_, errRm := DockerRm(container.ID)
 		if errRm != nil {
@@ -108,8 +111,6 @@ func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
 			return
 		}
 
-		resp.Errmsg = err.Error()
-		log.Printf("docker start container error: %v\n", err)
 		return
 	}
 
