@@ -8,6 +8,6 @@ if [[ $? -ne 0 ]]; then
 	 exit $?
 fi
 
-sudo docker build -t zyfdedh/fanach-deployer .
+sudo docker build -t zyfdedh/fanach-deployer:dev .
 
-# docker run --rm -p 18080:8080 zyfdedh/fanach-deployer
+# docker run --rm -p 18080:8080 zyfdedh/fanach-deployer:dev
