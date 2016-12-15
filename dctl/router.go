@@ -27,20 +27,12 @@ func handleDockerVersion(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 }
 
-func handleDockerRm(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodPost:
-		api.RmContainer(w, r)
-	default:
-		io.WriteString(w, "method not allowed")
-	}
-	defer r.Body.Close()
-}
-
-func handleDockerRun(w http.ResponseWriter, r *http.Request) {
+func handleSsContainer(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodPost:
 		api.AddSsContainer(w, r)
+	case http.MethodDelete:
+		api.RmContainer(w, r)
 	default:
 		io.WriteString(w, "method not allowed")
 	}
