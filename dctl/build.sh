@@ -1,5 +1,7 @@
 #!/bin/sh
 
+go get github.com/fsouza/go-dockerclient
+
 go build -o bin/dctl
 
 if [[ $? -ne 0 ]]; then
