@@ -12,6 +12,7 @@ func startServer() {
 	http.HandleFunc("/", handleRoot)
 	http.HandleFunc("/dver", handleDockerVersion)
 	http.HandleFunc("/ssc", handleSsContainer)
+	http.HandleFunc("/pause", handlePauseContainer)
 	http.HandleFunc("/stats", handleDockerStats)
 
 	s := &http.Server{Addr: fmt.Sprintf(":%d", port)}

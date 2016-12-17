@@ -39,6 +39,18 @@ func handleSsContainer(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 }
 
+func handlePauseContainer(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		api.PauseContainer(w, r)
+	case http.MethodDelete:
+		api.UnpauseContainer(w, r)
+	default:
+		io.WriteString(w, "method not allowed")
+	}
+	defer r.Body.Close()
+}
+
 func handleDockerStats(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
