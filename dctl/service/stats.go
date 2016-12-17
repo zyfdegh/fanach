@@ -12,13 +12,6 @@ import (
 func DockerStats(id string) (stats *entity.Stats, err error) {
 	stats = &entity.Stats{}
 
-	endpoint := "unix:///var/run/docker.sock"
-	client, err := docker.NewClient(endpoint)
-	if err != nil {
-		log.Printf("new docker client error: %v\n", err)
-		return
-	}
-
 	errCh := make(chan error, 1)
 	statsCh := make(chan *docker.Stats)
 	doneCh := make(chan bool)
@@ -27,7 +20,7 @@ func DockerStats(id string) (stats *entity.Stats, err error) {
 	// defer close(statsCh)
 
 	go func() {
-		errCh <- client.Stats(docker.StatsOptions{ID: id, Stats: statsCh, Stream: false, Done: doneCh})
+		errCh <- dockerClient.Stats(docker.StatsOptions{ID: id, Stats: statsCh, Stream: false, Done: doneCh})
 		close(errCh)
 	}()
 

@@ -58,14 +58,6 @@ func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
 	mem := req.Mem
 	cpu := req.CPU
 
-	endpoint := "unix:///var/run/docker.sock"
-	client, err := docker.NewClient(endpoint)
-	if err != nil {
-		resp.Errmsg = err.Error()
-		log.Printf("new docker client error: %v\n", err)
-		return
-	}
-
 	cmd := []string{"-s", "0.0.0.0", "-p", "8388", "-k", password, "-m", method}
 
 	hostConfig := &docker.HostConfig{
@@ -91,13 +83,13 @@ func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
 		HostConfig: hostConfig,
 	}
 
-	container, err := client.CreateContainer(opts)
+	container, err := dockerClient.CreateContainer(opts)
 	if err != nil {
 		resp.Errmsg = err.Error()
 		log.Printf("docker create container error: %v\n", err)
 		return
 	}
-	err = client.StartContainer(container.ID, hostConfig)
+	err = dockerClient.StartContainer(container.ID, hostConfig)
 	if err != nil {
 		log.Printf("docker start container error: %v\n", err)
 		resp.Errmsg = err.Error()
