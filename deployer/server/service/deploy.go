@@ -22,7 +22,7 @@ func Deploy(reqDeploy *entity.ReqDeploy) (resp entity.RespPostDeploy, err error)
 
 func installDocker(c *SSHConfig) {
 	log.Println("installing docker on server...")
-	cmd := "curl https://get.docker.com/ | sh"
+	cmd := "curl -sSL https://get.daocloud.io/docker | sh"
 	output, err := executeRemote(c, cmd)
 	if err != nil {
 		log.Printf("execute cmd %s on server error: %v", cmd, err)
