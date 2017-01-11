@@ -47,12 +47,10 @@ func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
 
 	image := req.Image
 	if strings.TrimSpace(image) == "" {
-		log.Printf("image invalid, using default %s\n", defaultImage)
 		image = defaultImage
 	}
 	method := req.Method
 	if !util.StringInSlice(method, supportedMethods) {
-		log.Printf("unsupported method, using default %s\n", defaultMethod)
 		method = defaultMethod
 	}
 	mem := req.Mem
