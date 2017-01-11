@@ -2,7 +2,7 @@ package entity
 
 // RunConfig is the body of POST /docker/run
 type RunConfig struct {
-	HostPort int    `json:"hostPort"`
+	HostPort int    `json:"host_port"`
 	Password string `json:"password"`
 	// optional, in Core
 	CPU float64 `json:"cpu,omitempty"`

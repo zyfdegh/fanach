@@ -6,5 +6,5 @@ type ReqDeploy struct {
 	Port       string `json:"port"`
 	User       string `json:"user"`
 	Password   string `json:"password,omitempty"`
-	PrivateKey string `json:"privateKey,omitempty"`
+	PrivateKey string `json:"private_key,omitempty"`
 }
