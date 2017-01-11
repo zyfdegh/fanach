@@ -1,22 +1,17 @@
 package server
 
 import (
-	"fmt"
-	"log"
-	"net/http"
+	"github.com/kataras/iris"
+	"github.com/zyfdegh/fanach/deployer/server/api"
 )
-
-const port = 8080
 
 // Start launches http server
 func Start() {
-	http.HandleFunc("/", handleRoot)
-	http.HandleFunc("/test", handleTest)
-	http.HandleFunc("/deploy", handleDeploy)
+	ir := iris.New()
 
-	s := &http.Server{Addr: fmt.Sprintf(":%d", port)}
-	log.Printf("server start on localhost:%d", port)
-	if err := s.ListenAndServe(); err != nil {
-		log.Fatalf("start server error: %v", err)
-	}
+	ir.Get("/", iris.ToHandlerFunc(api.GetRoot))
+	ir.Post("/deploy", iris.ToHandlerFunc(api.PostDeploy))
+	ir.Post("/test", iris.ToHandlerFunc(api.PostTest))
+
+	ir.Listen(":8080")
 }
