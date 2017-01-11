@@ -12,8 +12,8 @@ func main() {
 	ir.Post("/ssc", iris.ToHandlerFunc(api.AddSsContainer))
 	ir.Delete("/ssc", iris.ToHandlerFunc(api.RmContainer))
 	ir.Get("/stats", iris.ToHandlerFunc(api.GetDockerStats))
-	ir.Post("/pause", iris.ToHandlerFunc(api.PauseContainer))
-	ir.Delete("/pause", iris.ToHandlerFunc(api.UnpauseContainer))
+	ir.Put("/pause", iris.ToHandlerFunc(api.PauseContainer))
+	ir.Put("/unpause", iris.ToHandlerFunc(api.UnpauseContainer))
 
 	ir.Listen(":8080")
 }
