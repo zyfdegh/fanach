@@ -10,10 +10,10 @@ func main() {
 	ir.Get("/", iris.ToHandlerFunc(api.GetRoot))
 	ir.Get("/dver", iris.ToHandlerFunc(api.GetDockerVersion))
 	ir.Post("/ssc", iris.ToHandlerFunc(api.AddSsContainer))
-	ir.Delete("/ssc", iris.ToHandlerFunc(api.RmContainer))
-	ir.Get("/stats", iris.ToHandlerFunc(api.GetDockerStats))
-	ir.Put("/pause", iris.ToHandlerFunc(api.PauseContainer))
-	ir.Put("/unpause", iris.ToHandlerFunc(api.UnpauseContainer))
+	ir.Delete("/ssc/:id", api.RmContainer)
+	ir.Get("/stats/:id", api.GetDockerStats)
+	ir.Put("/pause/:id", api.PauseContainer)
+	ir.Put("/unpause/:id", api.UnpauseContainer)
 
 	ir.Listen(":8080")
 }

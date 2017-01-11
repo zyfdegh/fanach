@@ -96,7 +96,7 @@ func DockerRun(req entity.ReqPostRun) (resp entity.RespPostRun, err error) {
 
 		// rm created container
 		log.Printf("remove container %s\n", container.ID)
-		_, errRm := DockerRm(container.ID)
+		errRm := DockerRm(container.ID)
 		if errRm != nil {
 			resp.Errmsg = errRm.Error()
 			log.Printf("docker remove container error: %v\n", errRm)
