@@ -9,8 +9,8 @@ import (
 	"github.com/zyfdegh/fanach/dctl/service"
 )
 
-// GetVersion queries version of docker on host machine
-func GetVersion(w http.ResponseWriter, r *http.Request) {
+// GetDockerVersion queries version of docker on host machine
+func GetDockerVersion(w http.ResponseWriter, r *http.Request) {
 	resp, _ := service.Version()
 	body, err := json.Marshal(resp)
 	if err != nil {
