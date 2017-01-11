@@ -1,8 +1,5 @@
 #!/bin/sh
 
-go get golang.org/x/crypto/ssh
-go get github.com/kataras/iris
-
 go build -o bin/deployer
 cp -r static bin/
 
