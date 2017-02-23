@@ -17,6 +17,8 @@ var (
 
 	// ErrUserExist returns when username already exist while registering
 	ErrUserExist = errors.New("duplicated username")
+	// ErrUserNotFound returns when user does not exist
+	ErrUserNotFound = errors.New("user not found")
 )
 
 func initUserDB() error {
@@ -33,20 +35,21 @@ func initUserDB() error {
 }
 
 // CreateUser creates a new user
-func CreateUser(user entity.User) (newUser entity.User, err error) {
+func CreateUser(user entity.User) (newUser *entity.User, err error) {
 	id := genUserID(user.Username)
 	user.ID = id
 	user.RegTime = time.Now()
 
 	// check if duplicated
 	foundUser, err := queryUserByName(user.Username)
-	if err != nil {
+	if err != nil && err != leveldb.ErrNotFound {
 		log.Printf("query user by name error: %v\n", err)
 		return
 	}
-	if len(foundUser.ID) > 0 {
+
+	if foundUser != nil && len(foundUser.ID) > 0 {
 		log.Printf("duplicated username: %s\n", user.Username)
-		return
+		return nil, ErrUserExist
 	}
 
 	// save
@@ -56,8 +59,19 @@ func CreateUser(user entity.User) (newUser entity.User, err error) {
 		return
 	}
 
-	newUser = user
+	newUser = &user
 	return
+}
+
+// GetUser returns user by ID
+// return ErrUserNotFound if user does not exist
+func GetUser(userID string) (user *entity.User, err error) {
+	return getUser(userID)
+}
+
+// GetUsers return all users
+func GetUsers() (user *[]entity.User, err error) {
+	return getUsers()
 }
 
 func saveUser(user entity.User) (err error) {
@@ -68,7 +82,7 @@ func saveUser(user entity.User) (err error) {
 	return userdb.Put([]byte(user.ID), v, nil)
 }
 
-func getUser(userID string) (user entity.User, err error) {
+func getUser(userID string) (user *entity.User, err error) {
 	data, err := userdb.Get([]byte(userID), nil)
 	if err != nil {
 		return
@@ -81,7 +95,36 @@ func getUser(userID string) (user entity.User, err error) {
 	return
 }
 
-func queryUserByName(username string) (user entity.User, err error) {
+func getUsers() (pUsers *[]entity.User, err error) {
+	iter := userdb.NewIterator(nil, nil)
+	user := entity.User{}
+	users := []entity.User{}
+	for iter.Next() {
+		// Remember that the contents of the returned slice should not be modified, and
+		// only valid until the next call to Next.
+
+		// key := iter.Key()
+		// value := iter.Value()
+
+		if err = json.Unmarshal(iter.Value(), &user); err != nil {
+			log.Printf("unmarshal user error: %v\n", err)
+			continue
+		}
+
+		users = append(users, user)
+	}
+	iter.Release()
+	err = iter.Error()
+	if err != nil {
+		log.Printf("iterator over userdb error: %v\n", err)
+		return
+	}
+
+	pUsers = &users
+	return
+}
+
+func queryUserByName(username string) (user *entity.User, err error) {
 	return getUser(genUserID(username))
 }
 

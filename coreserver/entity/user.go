@@ -5,8 +5,8 @@ import "time"
 // User is the struct for registered user
 type User struct {
 	// required
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string   `json:"username"`
+	Password Password `json:"password"`
 	// optional
 	WeChatID string `json:"wechat_id"`
 	Type     string `json:"type"`

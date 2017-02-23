@@ -10,7 +10,7 @@ import (
 func CreateUser(ctx *iris.Context) {
 	resp := entity.RespPostUser{}
 
-	user := entity.User{}
+	user := &entity.User{}
 	err := ctx.ReadJSON(user)
 	if err != nil {
 		resp.Errmsg = err.Error()
@@ -19,10 +19,13 @@ func CreateUser(ctx *iris.Context) {
 		return
 	}
 
-	user, err = service.CreateUser(user)
+	user, err = service.CreateUser(*user)
 	if err != nil {
 		resp.Errmsg = err.Error()
 		resp.ErrNo = iris.StatusInternalServerError
+		if err == service.ErrUserExist {
+			resp.ErrNo = iris.StatusConflict
+		}
 		ctx.JSON(resp.ErrNo, resp)
 		return
 	}
@@ -33,7 +36,50 @@ func CreateUser(ctx *iris.Context) {
 }
 
 // GetUser handles GET /users/:id
-func GetUser(ctx *iris.Context) {}
+func GetUser(ctx *iris.Context) {
+	resp := entity.RespGetUser{}
+
+	userID := ctx.Param("id")
+	user, err := service.GetUser(userID)
+	if err != nil {
+		resp.Errmsg = err.Error()
+		if err == service.ErrUserNotFound {
+			resp.ErrNo = iris.StatusNotFound
+		}
+		ctx.JSON(resp.ErrNo, resp)
+		return
+	}
+
+	resp.Success = true
+	resp.User = *user
+	resp.User.Password = entity.HidenString
+	ctx.JSON(iris.StatusOK, resp)
+	return
+}
+
+// GetUsers handles GET /users
+// Return users in bulk
+func GetUsers(ctx *iris.Context) {
+	resp := entity.RespGetUsers{}
+
+	users, err := service.GetUsers()
+	if err != nil {
+		resp.Errmsg = err.Error()
+		resp.ErrNo = iris.StatusInternalServerError
+		ctx.JSON(resp.ErrNo, resp)
+		return
+	}
+
+	resp.Success = true
+	if users != nil {
+		for _, user := range *users {
+			user.Password = entity.HidenString
+			resp.Users = append(resp.Users, user)
+		}
+	}
+	ctx.JSON(iris.StatusOK, resp)
+	return
+}
 
 // ModifyUser handles PUT /users/:id
 func ModifyUser(ctx *iris.Context) {}

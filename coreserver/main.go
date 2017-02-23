@@ -14,6 +14,7 @@ func main() {
 	ir.Get("/", api.GetRoot)
 
 	ir.Post("/users", api.CreateUser)
+	ir.Get("/users", api.GetUsers)
 	ir.Get("/users/:id", api.GetUser)
 	ir.Put("/users/:id", api.ModifyUser)
 	ir.Delete("/users/:id", api.DeleteUser)

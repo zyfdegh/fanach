@@ -1,5 +1,7 @@
 #!/bin/sh
 
+rm -rf bin/
+
 go get github.com/kataras/iris
 go build -o bin/coreserver
 
