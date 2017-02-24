@@ -1,11 +1,11 @@
-FROM alpine:latest
-MAINTAINER zyfdegh <zyfdegg@gmail.com>
+FROM golang:1.8
 
-WORKDIR /root
-# fix library dependencies
-# otherwise golang binary may encounter 'not found' error
-RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
+ENV PROJECT $GOPATH/src/github.com/zyfdegh/fanach/coreserver
+WORKDIR $PROJECT
 
-COPY bin/coreserver /root/coreserver
+COPY . $PROJECT
+
+RUN	go build -o coreserver && \
+	go test 
 
 CMD ["./coreserver"]

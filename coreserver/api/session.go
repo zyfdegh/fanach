@@ -1,6 +1,6 @@
 package api
 
-import "github.com/kataras/iris"
+import "gopkg.in/kataras/iris.v6"
 
 // PostSession create session for a user
 func PostSession(ctx *iris.Context) {

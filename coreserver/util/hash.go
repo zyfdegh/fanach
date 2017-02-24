@@ -6,6 +6,7 @@ import (
 	"io"
 )
 
+// MD5sum hash
 func MD5sum(content string) string {
 	h := md5.New()
 	io.WriteString(h, content)

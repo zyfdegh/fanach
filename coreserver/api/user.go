@@ -1,9 +1,9 @@
 package api
 
 import (
-	"github.com/kataras/iris"
 	"github.com/zyfdegh/fanach/coreserver/entity"
 	"github.com/zyfdegh/fanach/coreserver/service"
+	"gopkg.in/kataras/iris.v6"
 )
 
 // CreateUser handles POST /users
