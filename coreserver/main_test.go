@@ -7,40 +7,68 @@ import (
 	"gopkg.in/kataras/iris.v6/httptest"
 )
 
-func TestRoot(t *testing.T) {
+func TestCoreServer(t *testing.T) {
 	server := newCoreServer()
 	e := httptest.New(server, t)
+
 	// test if server started
 	e.GET("/").
 		Expect().
 		Status(http.StatusOK).
 		Body().Equal("Fanach core server")
-}
 
-func TestRegister(t *testing.T) {
-	server := newCoreServer()
-	e := httptest.New(server, t)
-
-	// test user register
-	regJSON := map[string]string{
-		"username": "tom",
-		"password": "secret",
+	// register user "tom"
+	regJSONReg := map[string]string{
+		"username":  "tom",
+		"password":  "secret",
+		"wechat_id": "tomwechat",
+		"email":     "tom@email.com",
 	}
-	respJSON := `
+	respJSONReg := `
 		{
 			"success": true,
 			"errno": 0,
 			"errmsg": "",
-			"id": "9f9d51bc70ef21ca5c14f307980a29d8"
+			"id": "34b7da764b21d298ef307d04d8152dc5"
 		}
 	`
 	e.POST("/users").
-		WithJSON(regJSON).
+		WithJSON(regJSONReg).
 		Expect().
 		Status(http.StatusOK).
-		JSON().Schema(respJSON)
+		JSON().Schema(respJSONReg)
 
-	// register again
+	// update user "tom"
+	regJSONUpdate := map[string]string{
+		"password":  "strongpassword",
+		"wechat_id": "tom123",
+		"email":     "tom@outlook.com",
+	}
+	respJSONUpdate := `
+		{
+			"success": true,
+			"errno": 0,
+			"errmsg": "",
+			"user": {
+				"username": "tom",
+				"password": "***",
+				"wechat_id": "tom123",
+				"email": "tom@outlook.com",
+				"id": "34b7da764b21d298ef307d04d8152dc5"
+			}
+		}
+	`
+	e.PUT("/users/34b7da764b21d298ef307d04d8152dc5").
+		WithJSON(regJSONUpdate).
+		Expect().
+		Status(http.StatusOK).
+		JSON().Schema(respJSONUpdate)
+
+	// register again with name "tom"
+	regJSONConflict := map[string]string{
+		"username": "tom",
+		"password": "secret",
+	}
 	respJSONConflict := `
 		{
 			"success": false,
@@ -50,8 +78,13 @@ func TestRegister(t *testing.T) {
 		}
 	`
 	e.POST("/users").
-		WithJSON(regJSON).
+		WithJSON(regJSONConflict).
 		Expect().
 		Status(http.StatusConflict).
 		JSON().Schema(respJSONConflict)
+
+	// test delete user "tom"
+	e.DELETE("/users/34b7da764b21d298ef307d04d8152dc5").
+		Expect().
+		Status(http.StatusOK)
 }

@@ -12,6 +12,7 @@ type User struct {
 	Type     string `json:"type"`
 	Email    string `json:"email"`
 	// generated
-	ID      string    `json:"id"`
-	RegTime time.Time `json:"reg_time"`
+	ID         string    `json:"id"`
+	RegTime    time.Time `json:"reg_time"`
+	UpdateTime time.Time `json:"update_time"`
 }

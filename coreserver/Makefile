@@ -15,6 +15,9 @@ run-local:
 test-local:
 	go test ./...
 
+clean-local:
+	rm -rf bin/*
+
 # Build, test, run in Docker container
 
 build:

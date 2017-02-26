@@ -23,3 +23,9 @@ type RespGetUsers struct {
 	Resp
 	Users []User `json:"users,omitempty"`
 }
+
+// RespPutUser is the response to PUT /user
+type RespPutUser struct {
+	Resp
+	User User `json:"user,omitempty"`
+}

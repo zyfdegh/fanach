@@ -82,7 +82,49 @@ func GetUsers(ctx *iris.Context) {
 }
 
 // ModifyUser handles PUT /users/:id
-func ModifyUser(ctx *iris.Context) {}
+func ModifyUser(ctx *iris.Context) {
+	resp := entity.RespPutUser{}
+
+	userID := ctx.Param("id")
+
+	user := &entity.User{}
+	err := ctx.ReadJSON(user)
+	if err != nil {
+		resp.ErrNo = iris.StatusBadRequest
+		resp.Errmsg = err.Error()
+		ctx.JSON(resp.ErrNo, resp)
+		return
+	}
+
+	newUser, err := service.UpdateUser(userID, *user)
+	if err != nil {
+		resp.ErrNo = iris.StatusInternalServerError
+		resp.Errmsg = err.Error()
+		ctx.JSON(resp.ErrNo, resp)
+		return
+	}
+
+	resp.Success = true
+	resp.User = *newUser
+	resp.User.Password = entity.HidenString
+	ctx.JSON(iris.StatusOK, resp)
+	return
+}
 
 // DeleteUser handles DELETE /users/:id
-func DeleteUser(ctx *iris.Context) {}
+func DeleteUser(ctx *iris.Context) {
+	resp := &entity.Resp{}
+	userID := ctx.Param("id")
+
+	err := service.DeleteUser(userID)
+	if err != nil {
+		resp.ErrNo = iris.StatusInternalServerError
+		resp.Errmsg = err.Error()
+		ctx.JSON(resp.ErrNo, resp)
+		return
+	}
+
+	resp.Success = true
+	ctx.JSON(iris.StatusOK, resp)
+	return
+}

@@ -48,7 +48,7 @@ func CreateUser(user entity.User) (newUser *entity.User, err error) {
 	}
 
 	if foundUser != nil && len(foundUser.ID) > 0 {
-		log.Printf("duplicated username: %s\n", user.Username)
+		// log.Printf("duplicated username: %s\n", user.Username)
 		return nil, ErrUserExist
 	}
 
@@ -74,12 +74,52 @@ func GetUsers() (user *[]entity.User, err error) {
 	return getUsers()
 }
 
+// UpdateUser updates an user
+func UpdateUser(userID string, user entity.User) (modifiedUser *entity.User, err error) {
+	modifiedUser, err = getUser(userID)
+	if err != nil {
+		log.Printf("get user by id %s error: %v", userID, err)
+		return
+	}
+
+	modifiedUser.UpdateTime = time.Now()
+	if len(user.Email) > 0 {
+		modifiedUser.Email = user.Email
+	}
+	if len(user.WeChatID) > 0 {
+		modifiedUser.WeChatID = user.WeChatID
+	}
+	if len(user.Type) > 0 {
+		modifiedUser.Type = user.Type
+	}
+	if len(user.Password) > 0 {
+		modifiedUser.Password = user.Password
+	}
+
+	err = saveUser(*modifiedUser)
+	if err != nil {
+		log.Printf("update user error: %v\n", err)
+		return
+	}
+
+	return
+}
+
+// DeleteUser deletes a user
+func DeleteUser(userID string) (err error) {
+	return deleteUser(userID)
+}
+
 func saveUser(user entity.User) (err error) {
 	v, err := json.Marshal(user)
 	if err != nil {
 		return
 	}
 	return userdb.Put([]byte(user.ID), v, nil)
+}
+
+func deleteUser(userID string) (err error) {
+	return userdb.Delete([]byte(userID), nil)
 }
 
 func getUser(userID string) (user *entity.User, err error) {
