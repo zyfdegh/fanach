@@ -38,6 +38,27 @@ func TestCoreServer(t *testing.T) {
 		Status(http.StatusOK).
 		JSON().Schema(respJSONReg)
 
+	// query user "tom"
+	respJSONQuery := `
+		{
+			"success": true,
+			"errno": 0,
+			"errmsg": "",
+			"user": {
+				"id": "34b7da764b21d298ef307d04d8152dc5",
+				"username": "tom",
+				"password": "***",
+				"wechat_id": "tomwechat",
+				"type": "",
+				"email": "tom@email.com"
+			}
+		}
+	`
+	e.GET("/users/34b7da764b21d298ef307d04d8152dc5").
+		Expect().
+		Status(http.StatusOK).
+		JSON().Schema(respJSONQuery)
+
 	// update user "tom"
 	regJSONUpdate := map[string]string{
 		"password":  "strongpassword",
@@ -50,11 +71,12 @@ func TestCoreServer(t *testing.T) {
 			"errno": 0,
 			"errmsg": "",
 			"user": {
+				"id": "34b7da764b21d298ef307d04d8152dc5",
 				"username": "tom",
 				"password": "***",
 				"wechat_id": "tom123",
-				"email": "tom@outlook.com",
-				"id": "34b7da764b21d298ef307d04d8152dc5"
+				"type": "",
+				"email": "tom@outlook.com"
 			}
 		}
 	`
@@ -82,6 +104,58 @@ func TestCoreServer(t *testing.T) {
 		Expect().
 		Status(http.StatusConflict).
 		JSON().Schema(respJSONConflict)
+
+	// register user "bob"
+	regJSONReg2 := map[string]string{
+		"username":  "bob",
+		"password":  "password",
+		"wechat_id": "bob123",
+		"email":     "bob@email.com",
+	}
+	respJSONReg2 := `
+			{
+				"success": true,
+				"errno": 0,
+				"errmsg": "",
+				"id": "9f9d51bc70ef21ca5c14f307980a29d8"
+			}
+		`
+	e.POST("/users").
+		WithJSON(regJSONReg2).
+		Expect().
+		Status(http.StatusOK).
+		JSON().Schema(respJSONReg2)
+
+	// query all users
+	respJSONQuery2 := `
+			{
+				"success": true,
+				"errno": 0,
+				"errmsg": "",
+				"users": [
+					{
+						"id": "34b7da764b21d298ef307d04d8152dc5",
+						"username": "tom",
+						"password": "***",
+						"wechat_id": "tom123",
+						"type": "",
+						"email": "tom@outlook.com"
+					},
+					{
+						"id": "9f9d51bc70ef21ca5c14f307980a29d8",
+						"username": "bob",
+						"password": "***",
+						"wechat_id": "bob123",
+						"type": "",
+						"email": "bob@email.com"
+					}
+				]
+			}
+		`
+	e.GET("/users").
+		Expect().
+		Status(http.StatusOK).
+		JSON().Schema(respJSONQuery2)
 
 	// test delete user "tom"
 	e.DELETE("/users/34b7da764b21d298ef307d04d8152dc5").

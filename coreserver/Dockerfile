@@ -5,7 +5,7 @@ WORKDIR $PROJECT
 
 COPY . $PROJECT
 
-RUN	go build -o coreserver && \
-	go test $(go list ./... | grep -v /vendor/)
+RUN	go test $(go list ./... | grep -v /vendor/) && \
+	go build -o coreserver
 
 CMD ["./coreserver"]

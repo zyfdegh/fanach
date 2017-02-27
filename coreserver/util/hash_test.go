@@ -12,6 +12,7 @@ func TestMD5sum(t *testing.T) {
 		out string
 	}{
 		{in: "tom", out: "34b7da764b21d298ef307d04d8152dc5"},
+		{in: "bob", out: "9f9d51bc70ef21ca5c14f307980a29d8"},
 	}
 
 	for _, c := range cases {
