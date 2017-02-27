@@ -29,8 +29,10 @@ func CreateUser(ctx *iris.Context) {
 		ctx.JSON(resp.ErrNo, resp)
 		return
 	}
+
 	resp.Success = true
-	resp.ID = newUser.ID
+	newUser.Password = entity.HidenString
+	resp.User = *newUser
 	ctx.JSON(iris.StatusOK, resp)
 	return
 }

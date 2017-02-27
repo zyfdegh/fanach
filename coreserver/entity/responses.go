@@ -9,7 +9,7 @@ type Resp struct {
 // RespPostUser is the response to POST /user
 type RespPostUser struct {
 	Resp
-	ID string `json:"id"`
+	User User `json:"user,omitempty"`
 }
 
 // RespGetUser is the response to GET /user

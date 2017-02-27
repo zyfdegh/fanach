@@ -29,7 +29,14 @@ func TestCoreServer(t *testing.T) {
 			"success": true,
 			"errno": 0,
 			"errmsg": "",
-			"id": "34b7da764b21d298ef307d04d8152dc5"
+			"user": {
+				"id": "34b7da764b21d298ef307d04d8152dc5",
+				"username": "tom",
+				"password": "***",
+				"wechat_id": "tomwechat",
+				"type": "",
+				"email": "tom@email.com"
+			}
 		}
 	`
 	e.POST("/users").
@@ -157,8 +164,14 @@ func TestCoreServer(t *testing.T) {
 		Status(http.StatusOK).
 		JSON().Schema(respJSONQuery2)
 
+	// clean up
 	// test delete user "tom"
 	e.DELETE("/users/34b7da764b21d298ef307d04d8152dc5").
+		Expect().
+		Status(http.StatusOK)
+
+	// test delete user "bob"
+	e.DELETE("/users/9f9d51bc70ef21ca5c14f307980a29d8").
 		Expect().
 		Status(http.StatusOK)
 }
