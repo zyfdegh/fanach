@@ -35,13 +35,19 @@ func initUserDB() error {
 }
 
 // CreateUser creates a new user
-func CreateUser(user entity.User) (newUser *entity.User, err error) {
-	id := genUserID(user.Username)
-	user.ID = id
-	user.RegTime = time.Now()
+func CreateUser(user entity.ReqPostUser) (newUser *entity.User, err error) {
+	newUser = &entity.User{}
+	newUser.Username = user.Username
+	newUser.Password = user.Password
+	newUser.WeChatID = user.WeChatID
+	newUser.Type = user.Type
+	newUser.Email = user.Email
+
+	newUser.ID = genUserID(newUser.Username)
+	newUser.RegTime = time.Now()
 
 	// check if duplicated
-	foundUser, err := queryUserByName(user.Username)
+	foundUser, err := queryUserByName(newUser.Username)
 	if err != nil && err != leveldb.ErrNotFound {
 		log.Printf("query user by name error: %v\n", err)
 		return
@@ -53,13 +59,12 @@ func CreateUser(user entity.User) (newUser *entity.User, err error) {
 	}
 
 	// save
-	err = saveUser(user)
+	err = saveUser(*newUser)
 	if err != nil {
 		log.Printf("save user error: %v\n", err)
 		return
 	}
 
-	newUser = &user
 	return
 }
 
@@ -75,7 +80,7 @@ func GetUsers() (user *[]entity.User, err error) {
 }
 
 // UpdateUser updates an user
-func UpdateUser(userID string, user entity.User) (modifiedUser *entity.User, err error) {
+func UpdateUser(userID string, user entity.ReqPutUser) (modifiedUser *entity.User, err error) {
 	modifiedUser, err = getUser(userID)
 	if err != nil {
 		log.Printf("get user by id %s error: %v", userID, err)

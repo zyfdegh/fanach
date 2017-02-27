@@ -10,7 +10,7 @@ import (
 func CreateUser(ctx *iris.Context) {
 	resp := entity.RespPostUser{}
 
-	user := &entity.User{}
+	user := &entity.ReqPostUser{}
 	err := ctx.ReadJSON(user)
 	if err != nil {
 		resp.Errmsg = err.Error()
@@ -19,7 +19,7 @@ func CreateUser(ctx *iris.Context) {
 		return
 	}
 
-	user, err = service.CreateUser(*user)
+	newUser, err := service.CreateUser(*user)
 	if err != nil {
 		resp.Errmsg = err.Error()
 		resp.ErrNo = iris.StatusInternalServerError
@@ -30,7 +30,7 @@ func CreateUser(ctx *iris.Context) {
 		return
 	}
 	resp.Success = true
-	resp.ID = user.ID
+	resp.ID = newUser.ID
 	ctx.JSON(iris.StatusOK, resp)
 	return
 }
@@ -87,7 +87,7 @@ func ModifyUser(ctx *iris.Context) {
 
 	userID := ctx.Param("id")
 
-	user := &entity.User{}
+	user := &entity.ReqPutUser{}
 	err := ctx.ReadJSON(user)
 	if err != nil {
 		resp.ErrNo = iris.StatusBadRequest
