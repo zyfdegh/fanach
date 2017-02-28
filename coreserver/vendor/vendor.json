@@ -23,17 +23,17 @@
 			"revisionTime": "2017-02-23T12:19:43Z"
 		},
 		{
+			"checksumSHA1": "pXA0VXOMBMY18/4WFJjqnsT51jo=",
+			"path": "github.com/dchest/uniuri",
+			"revision": "8902c56451e9b58ff940bbe5fec35d5f9c04584a",
+			"revisionTime": "2016-02-12T16:43:26Z"
+		},
+		{
 			"checksumSHA1": "ET3s84KlxOYhKZ1t9lKDD1hzM/U=",
 			"origin": "gopkg.in/kataras/iris.v6/vendor/github.com/fatih/structs",
 			"path": "github.com/fatih/structs",
 			"revision": "db5b7b1c33d8fafff1c54eabb7b66a91835ff686",
 			"revisionTime": "2017-02-23T12:19:43Z"
-		},
-		{
-			"checksumSHA1": "ZmcLJc3WgGjkQuEsa49mYsoyN5o=",
-			"path": "github.com/gavv/httpexpect",
-			"revision": "4d08c42846fcff507faca71d86a12e0828c1f47b",
-			"revisionTime": "2017-01-22T06:53:01Z"
 		},
 		{
 			"checksumSHA1": "q/AaJa/6c+YxodimOaMK7AMAWNo=",
@@ -182,6 +182,18 @@
 			"revisionTime": "2017-02-23T12:19:43Z"
 		},
 		{
+			"checksumSHA1": "SVuQBdmmd+EySNEYdzoFqxp2Tt8=",
+			"path": "github.com/kataras/go-sessions/sessiondb/leveldb",
+			"revision": "5fbb60d99b3cd100a2ae586cb49474368cebab58",
+			"revisionTime": "2016-11-06T05:58:01Z"
+		},
+		{
+			"checksumSHA1": "8n52exMPk87DpCYlw/CXOk8w580=",
+			"path": "github.com/kataras/go-sessions/sessiondb/leveldb/record",
+			"revision": "5fbb60d99b3cd100a2ae586cb49474368cebab58",
+			"revisionTime": "2016-11-06T05:58:01Z"
+		},
+		{
 			"checksumSHA1": "3yvgCItSJjzj1oQbnsPPHxv4WvM=",
 			"origin": "gopkg.in/kataras/iris.v6/vendor/github.com/kataras/go-template",
 			"path": "github.com/kataras/go-template",
@@ -201,12 +213,6 @@
 			"path": "github.com/klauspost/compress/gzip",
 			"revision": "db5b7b1c33d8fafff1c54eabb7b66a91835ff686",
 			"revisionTime": "2017-02-23T12:19:43Z"
-		},
-		{
-			"checksumSHA1": "+azPXaZpPF14YHRghNAer13ThQU=",
-			"path": "github.com/klauspost/compress/zlib",
-			"revision": "14c9a76e3c95e47f8ccce949bba2c1101a8b85e6",
-			"revisionTime": "2017-02-18T08:16:04Z"
 		},
 		{
 			"checksumSHA1": "/y2LxeEzZLyaDZe3ty/nuGjJtqo=",
@@ -363,29 +369,11 @@
 			"revisionTime": "2016-12-27T11:05:19Z"
 		},
 		{
-			"checksumSHA1": "Rom0cmkD10OJv/tWQVVJukfkt+8=",
-			"origin": "gopkg.in/kataras/iris.v6/vendor/github.com/kataras/go-template/vendor/github.com/valyala/bytebufferpool",
+			"checksumSHA1": "UaN69OGz5qQyBGQLYn06Wjs/uUg=",
+			"origin": "gopkg.in/kataras/iris.v6/vendor/github.com/valyala/bytebufferpool",
 			"path": "github.com/valyala/bytebufferpool",
 			"revision": "db5b7b1c33d8fafff1c54eabb7b66a91835ff686",
 			"revisionTime": "2017-02-23T12:19:43Z"
-		},
-		{
-			"checksumSHA1": "bLa60Y/jg1DAFoiUWxfJJ4fh4F4=",
-			"path": "github.com/valyala/fasthttp",
-			"revision": "fc109d6887b5edb43510d924d14d735f3975fb51",
-			"revisionTime": "2017-02-22T16:45:09Z"
-		},
-		{
-			"checksumSHA1": "nMWLZCTKLciURGG8o/KeEPUExkY=",
-			"path": "github.com/valyala/fasthttp/fasthttputil",
-			"revision": "fc109d6887b5edb43510d924d14d735f3975fb51",
-			"revisionTime": "2017-02-22T16:45:09Z"
-		},
-		{
-			"checksumSHA1": "YXXy4b1yOQx/iL3Icv6svTmcGss=",
-			"path": "github.com/valyala/fasthttp/stackless",
-			"revision": "fc109d6887b5edb43510d924d14d735f3975fb51",
-			"revisionTime": "2017-02-22T16:45:09Z"
 		},
 		{
 			"checksumSHA1": "cfleO2EvL98Z+SwlweVGwnTrtNo=",
@@ -451,6 +439,18 @@
 			"revisionTime": "2017-02-23T12:19:43Z"
 		},
 		{
+			"checksumSHA1": "vE43s37+4CJ2CDU6TlOUOYE0K9c=",
+			"path": "golang.org/x/crypto/bcrypt",
+			"revision": "453249f01cfeb54c3d549ddb75ff152ca243f9d8",
+			"revisionTime": "2017-02-08T20:51:15Z"
+		},
+		{
+			"checksumSHA1": "JsJdKXhz87gWenMwBeejTOeNE7k=",
+			"path": "golang.org/x/crypto/blowfish",
+			"revision": "453249f01cfeb54c3d549ddb75ff152ca243f9d8",
+			"revisionTime": "2017-02-08T20:51:15Z"
+		},
+		{
 			"checksumSHA1": "Y+HGqEkYM15ir+J93MEaHdyFy0c=",
 			"origin": "gopkg.in/kataras/iris.v6/vendor/golang.org/x/net/context",
 			"path": "golang.org/x/net/context",
@@ -498,6 +498,12 @@
 			"revisionTime": "2017-02-23T12:19:43Z"
 		},
 		{
+			"checksumSHA1": "sAlAA0A2S9kXyJHTuthN8fpFnsA=",
+			"path": "gopkg.in/kataras/iris.v6/adaptors/sessions",
+			"revision": "db5b7b1c33d8fafff1c54eabb7b66a91835ff686",
+			"revisionTime": "2017-02-23T12:19:43Z"
+		},
+		{
 			"checksumSHA1": "GbSwUGFqcfDXf27Znb+eDunrJ2w=",
 			"path": "gopkg.in/kataras/iris.v6/httptest",
 			"revision": "db5b7b1c33d8fafff1c54eabb7b66a91835ff686",
@@ -509,12 +515,6 @@
 			"path": "gopkg.in/yaml.v2",
 			"revision": "db5b7b1c33d8fafff1c54eabb7b66a91835ff686",
 			"revisionTime": "2017-02-23T12:19:43Z"
-		},
-		{
-			"checksumSHA1": "TE8uFjkFcFMJ3dSZC4zgiRNW2OA=",
-			"path": "gopkg.in/yudai/gojsondiff.v1/formatter",
-			"revision": "d53dddaf16b9f5b19737f4722943e7e1f289af13",
-			"revisionTime": "2017-01-20T05:13:32Z"
 		}
 	],
 	"rootPath": "github.com/zyfdegh/fanach/coreserver"
