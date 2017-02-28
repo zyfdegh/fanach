@@ -1,10 +1,14 @@
-all: build
+default: build
 
 # Build, test, run in local
 
-dep:
+dep-init:
 	go get github.com/kardianos/govendor
-	govendor update
+	govendor init
+
+dep-update:
+	govendor remove +unused
+	govendor add +external
 
 build-local:
 	go build -o bin/coreserver

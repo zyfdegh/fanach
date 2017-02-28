@@ -19,3 +19,9 @@ type ReqPutUser struct {
 	Type     string   `json:"type"`
 	Email    string   `json:"email"`
 }
+
+// ReqPostSess is the body of POST /sess
+type ReqPostSess struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}

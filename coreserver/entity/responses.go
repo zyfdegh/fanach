@@ -6,13 +6,13 @@ type Resp struct {
 	Err
 }
 
-// RespPostUser is the response to POST /user
+// RespPostUser is the response to POST /users
 type RespPostUser struct {
 	Resp
 	User User `json:"user,omitempty"`
 }
 
-// RespGetUser is the response to GET /user
+// RespGetUser is the response to GET /users/:id
 type RespGetUser struct {
 	Resp
 	User User `json:"user,omitempty"`
@@ -24,8 +24,14 @@ type RespGetUsers struct {
 	Users []User `json:"users,omitempty"`
 }
 
-// RespPutUser is the response to PUT /user
+// RespPutUser is the response to PUT /users/:id
 type RespPutUser struct {
 	Resp
 	User User `json:"user,omitempty"`
+}
+
+// RespPostSess is the response to POST /sess
+type RespPostSess struct {
+	Resp
+	Sess Session `json:"sess,omitempty"`
 }

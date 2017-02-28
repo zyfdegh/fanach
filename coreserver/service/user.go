@@ -15,8 +15,8 @@ import (
 var (
 	userdb *leveldb.DB
 
-	// ErrUserExist returns when username already exist while registering
-	ErrUserExist = errors.New("duplicated username")
+	// ErrUsernameConflict returns when username already exist while registering
+	ErrUsernameConflict = errors.New("duplicated username")
 	// ErrUserNotFound returns when user does not exist
 	ErrUserNotFound = errors.New("user not found")
 )
@@ -38,7 +38,13 @@ func initUserDB() error {
 func CreateUser(user entity.ReqPostUser) (newUser *entity.User, err error) {
 	newUser = &entity.User{}
 	newUser.Username = user.Username
-	newUser.Password = user.Password
+
+	bcryptPassword, err := hashPassword(user.Password)
+	if err != nil {
+		log.Printf("hash password error: %v\n", err)
+		return
+	}
+	newUser.Password = bcryptPassword
 	newUser.WeChatID = user.WeChatID
 	newUser.Type = user.Type
 	newUser.Email = user.Email
@@ -55,7 +61,7 @@ func CreateUser(user entity.ReqPostUser) (newUser *entity.User, err error) {
 
 	if foundUser != nil && len(foundUser.ID) > 0 {
 		// log.Printf("duplicated username: %s\n", user.Username)
-		return nil, ErrUserExist
+		return nil, ErrUsernameConflict
 	}
 
 	// save
@@ -98,7 +104,12 @@ func UpdateUser(userID string, user entity.ReqPutUser) (modifiedUser *entity.Use
 		modifiedUser.Type = user.Type
 	}
 	if len(user.Password) > 0 {
-		modifiedUser.Password = user.Password
+		bcryptPassword, err2 := hashPassword(user.Password)
+		if err2 != nil {
+			log.Printf("hash password error: %v\n", err2)
+			return
+		}
+		modifiedUser.Password = bcryptPassword
 	}
 
 	err = saveUser(*modifiedUser)
@@ -171,6 +182,11 @@ func getUsers() (pUsers *[]entity.User, err error) {
 
 func queryUserByName(username string) (user *entity.User, err error) {
 	return getUser(genUserID(username))
+}
+
+func hashPassword(password entity.Password) (hashPassword entity.Password, err error) {
+	bcryptPassword, err := util.BCrypt(string(password))
+	return entity.Password(bcryptPassword), err
 }
 
 func genUserID(username string) (id string) {

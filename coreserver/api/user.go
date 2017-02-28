@@ -23,7 +23,7 @@ func CreateUser(ctx *iris.Context) {
 	if err != nil {
 		resp.Errmsg = err.Error()
 		resp.ErrNo = iris.StatusInternalServerError
-		if err == service.ErrUserExist {
+		if err == service.ErrUsernameConflict {
 			resp.ErrNo = iris.StatusConflict
 		}
 		ctx.JSON(resp.ErrNo, resp)
