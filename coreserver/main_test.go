@@ -19,13 +19,13 @@ func TestCoreServer(t *testing.T) {
 		Body().Equal("Fanach core server")
 
 	// register user "tom"
-	regJSONReg := map[string]string{
+	reqJSON := map[string]string{
 		"username":  "tom",
 		"password":  "secret",
 		"wechat_id": "tomwechat",
 		"email":     "tom@email.com",
 	}
-	respJSONReg := `
+	expectRespJSON := `
 		{
 			"success": true,
 			"errno": 0,
@@ -40,14 +40,23 @@ func TestCoreServer(t *testing.T) {
 			}
 		}
 	`
-	e.POST("/users").
-		WithJSON(regJSONReg).
+	gotRespJSON := e.POST("/users").
+		WithJSON(reqJSON).
 		Expect().
 		Status(http.StatusOK).
-		JSON().Schema(respJSONReg)
+		JSON()
+
+	// validate response JSON
+	gotRespJSON.Schema(expectRespJSON)
+	gotRespJSON.Object().ValueEqual("success", true)
+	gotRespJSON.Object().Value("user").Object().ValueEqual("id", "34b7da764b21d298ef307d04d8152dc5")
+	gotRespJSON.Object().Value("user").Object().ValueEqual("username", "tom")
+	gotRespJSON.Object().Value("user").Object().ValueEqual("password", "***")
+	gotRespJSON.Object().Value("user").Object().ValueEqual("wechat_id", "tomwechat")
+	gotRespJSON.Object().Value("user").Object().ValueEqual("email", "tom@email.com")
 
 	// query user "tom"
-	respJSONQuery := `
+	expectRespJSON2 := `
 		{
 			"success": true,
 			"errno": 0,
@@ -62,18 +71,27 @@ func TestCoreServer(t *testing.T) {
 			}
 		}
 	`
-	e.GET("/users/34b7da764b21d298ef307d04d8152dc5").
+	gotRespJSON2 := e.GET("/users/34b7da764b21d298ef307d04d8152dc5").
 		Expect().
 		Status(http.StatusOK).
-		JSON().Schema(respJSONQuery)
+		JSON()
+
+	// validate response JSON
+	gotRespJSON2.Schema(expectRespJSON2)
+	gotRespJSON2.Object().ValueEqual("success", true)
+	gotRespJSON2.Object().Value("user").Object().ValueEqual("id", "34b7da764b21d298ef307d04d8152dc5")
+	gotRespJSON2.Object().Value("user").Object().ValueEqual("username", "tom")
+	gotRespJSON2.Object().Value("user").Object().ValueEqual("password", "***")
+	gotRespJSON2.Object().Value("user").Object().ValueEqual("wechat_id", "tomwechat")
+	gotRespJSON2.Object().Value("user").Object().ValueEqual("email", "tom@email.com")
 
 	// update user "tom"
-	regJSONUpdate := map[string]string{
+	reqJSON3 := map[string]string{
 		"password":  "strongpassword",
 		"wechat_id": "tom123",
 		"email":     "tom@outlook.com",
 	}
-	respJSONUpdate := `
+	expectRespJSON3 := `
 		{
 			"success": true,
 			"errno": 0,
@@ -88,18 +106,27 @@ func TestCoreServer(t *testing.T) {
 			}
 		}
 	`
-	e.PUT("/users/34b7da764b21d298ef307d04d8152dc5").
-		WithJSON(regJSONUpdate).
+	gotRespJSON3 := e.PUT("/users/34b7da764b21d298ef307d04d8152dc5").
+		WithJSON(reqJSON3).
 		Expect().
 		Status(http.StatusOK).
-		JSON().Schema(respJSONUpdate)
+		JSON()
+
+	// validate response JSON
+	gotRespJSON3.Schema(expectRespJSON3)
+	gotRespJSON3.Object().ValueEqual("success", true)
+	gotRespJSON3.Object().Value("user").Object().ValueEqual("id", "34b7da764b21d298ef307d04d8152dc5")
+	gotRespJSON3.Object().Value("user").Object().ValueEqual("username", "tom")
+	gotRespJSON3.Object().Value("user").Object().ValueEqual("password", "***")
+	gotRespJSON3.Object().Value("user").Object().ValueEqual("wechat_id", "tom123")
+	gotRespJSON3.Object().Value("user").Object().ValueEqual("email", "tom@outlook.com")
 
 	// register again with name "tom"
-	regJSONConflict := map[string]string{
+	reqJSON4 := map[string]string{
 		"username": "tom",
 		"password": "secret",
 	}
-	respJSONConflict := `
+	expectRespJSON4 := `
 		{
 			"success": false,
 			"errno": 409,
@@ -107,35 +134,57 @@ func TestCoreServer(t *testing.T) {
 			"id": ""
 		}
 	`
-	e.POST("/users").
-		WithJSON(regJSONConflict).
+	gotRespJSON4 := e.POST("/users").
+		WithJSON(reqJSON4).
 		Expect().
 		Status(http.StatusConflict).
-		JSON().Schema(respJSONConflict)
+		JSON()
+
+	// validate response JSON
+	gotRespJSON4.Schema(expectRespJSON4)
+	gotRespJSON4.Object().ValueEqual("success", false)
+	gotRespJSON4.Object().ValueEqual("errno", 409)
+	gotRespJSON4.Object().ValueEqual("errmsg", "duplicated username")
 
 	// register user "bob"
-	regJSONReg2 := map[string]string{
+	reqJSON5 := map[string]string{
 		"username":  "bob",
 		"password":  "password",
 		"wechat_id": "bob123",
 		"email":     "bob@email.com",
 	}
-	respJSONReg2 := `
+	expectRespJSON5 := `
 			{
 				"success": true,
 				"errno": 0,
 				"errmsg": "",
-				"id": "9f9d51bc70ef21ca5c14f307980a29d8"
+				"user": {
+					"id": "9f9d51bc70ef21ca5c14f307980a29d8",
+					"username": "bob",
+					"password": "***",
+					"wechat_id": "bob123",
+					"type": "",
+					"email": "bob@email.com"
+				}
 			}
 		`
-	e.POST("/users").
-		WithJSON(regJSONReg2).
+	gotRespJSON5 := e.POST("/users").
+		WithJSON(reqJSON5).
 		Expect().
 		Status(http.StatusOK).
-		JSON().Schema(respJSONReg2)
+		JSON()
+
+	// validate response JSON
+	gotRespJSON5.Schema(expectRespJSON5)
+	gotRespJSON5.Object().ValueEqual("success", true)
+	gotRespJSON5.Object().Value("user").Object().ValueEqual("id", "9f9d51bc70ef21ca5c14f307980a29d8")
+	gotRespJSON5.Object().Value("user").Object().ValueEqual("username", "bob")
+	gotRespJSON5.Object().Value("user").Object().ValueEqual("password", "***")
+	gotRespJSON5.Object().Value("user").Object().ValueEqual("wechat_id", "bob123")
+	gotRespJSON5.Object().Value("user").Object().ValueEqual("email", "bob@email.com")
 
 	// query all users
-	respJSONQuery2 := `
+	expectRespJSON6 := `
 			{
 				"success": true,
 				"errno": 0,
@@ -160,14 +209,19 @@ func TestCoreServer(t *testing.T) {
 				]
 			}
 		`
-	e.GET("/users").
+	gotRespJSON6 := e.GET("/users").
 		Expect().
 		Status(http.StatusOK).
-		JSON().Schema(respJSONQuery2)
+		JSON()
+
+	// validate response JSON
+	gotRespJSON6.Schema(expectRespJSON6)
+	gotRespJSON6.Object().ValueEqual("success", true)
+	gotRespJSON6.Object().Value("users").Array().Element(0).Object().ValueEqual("id", "34b7da764b21d298ef307d04d8152dc5")
+	gotRespJSON6.Object().Value("users").Array().Element(1).Object().ValueEqual("id", "9f9d51bc70ef21ca5c14f307980a29d8")
+	// This is tired and boring work, I won't do anymore
 
 	// create session(login)
-	now := time.Now()
-
 	regJSONSess := map[string]string{
 		"username": "bob",
 		"password": "password",
@@ -179,6 +233,7 @@ func TestCoreServer(t *testing.T) {
 		Cookie("sessid")
 
 	// check cookie
+	now := time.Now()
 	cookie.Expires().InRange(now, now.Add(24*time.Hour))
 	cookie.Path().Equal("/")
 
