@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 	"testing"
+	"time"
 
 	"gopkg.in/kataras/iris.v6/httptest"
 )
@@ -163,6 +164,28 @@ func TestCoreServer(t *testing.T) {
 		Expect().
 		Status(http.StatusOK).
 		JSON().Schema(respJSONQuery2)
+
+	// create session(login)
+	now := time.Now()
+
+	regJSONSess := map[string]string{
+		"username": "bob",
+		"password": "password",
+	}
+	cookie := e.POST("/sess").
+		WithJSON(regJSONSess).
+		Expect().
+		Status(http.StatusOK).
+		Cookie("sessid")
+
+	// check cookie
+	cookie.Expires().InRange(now, now.Add(24*time.Hour))
+	cookie.Path().Equal("/")
+
+	// delete session (logout)
+	e.DELETE("/sess/sessid").
+		Expect().
+		Status(http.StatusOK)
 
 	// clean up
 	// test delete user "tom"
