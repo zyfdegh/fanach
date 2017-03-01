@@ -35,3 +35,9 @@ type RespPostSess struct {
 	Resp
 	Sess Session `json:"sess,omitempty"`
 }
+
+// RespGetProducts is the response to GET /prods
+type RespGetProducts struct {
+	Resp
+	Products []Product `json:"products,omitempty"`
+}

@@ -252,4 +252,44 @@ func TestCoreServer(t *testing.T) {
 	e.DELETE("/users/9f9d51bc70ef21ca5c14f307980a29d8").
 		Expect().
 		Status(http.StatusOK)
+
+	// test get products
+	expectRespJSON7 := `
+	{
+	  "success": true,
+	  "errno": 0,
+	  "errmsg": "",
+	  "products": [
+	    {
+	      "name": "Free",
+	      "description": "Free account",
+	      "price": 0,
+	      "price_unit": "￥",
+	      "dataflow": 1024,
+	      "dataflow_unit": "MB",
+	      "expire": 1,
+	      "expire_unit": "Month"
+	    },
+	    {
+	      "name": "1元包月",
+	      "description": "1元包月, 10GB",
+	      "price": 1,
+	      "price_unit": "￥",
+	      "dataflow": 10240,
+	      "dataflow_unit": "MB",
+	      "expire": 1,
+	      "expire_unit": "Month"
+	    }
+	  ]
+	}
+	`
+	gotRespJSON7 := e.GET("/prods").
+		Expect().
+		Status(http.StatusOK).
+		JSON()
+
+	// validate response JSON
+	gotRespJSON7.Schema(expectRespJSON7)
+	gotRespJSON7.Object().ValueEqual("success", true)
+	gotRespJSON7.Object().Value("products").Array().NotEmpty()
 }

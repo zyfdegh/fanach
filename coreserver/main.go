@@ -31,6 +31,8 @@ func newCoreServer() *iris.Framework {
 	ir.Post("/sess", api.PostSession)
 	ir.Delete("/sess/:key", api.DeleteSession)
 
+	ir.Get("/prods", api.GetProducts)
+
 	// save sessions to LevelDB(with GC)
 	// import "gopkg.in/kataras/iris.v6/adaptors/sessions"
 	// import "github.com/kataras/go-sessions/sessiondb/leveldb"
