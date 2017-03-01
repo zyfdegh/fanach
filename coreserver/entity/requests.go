@@ -22,6 +22,14 @@ type ReqPutUser struct {
 
 // ReqPostSess is the body of POST /sess
 type ReqPostSess struct {
+	// required
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+// ReqPostOrder is the body of POST /orders
+type ReqPostOrder struct {
+	// required
+	Username  string `json:"username"`
+	ProductID string `json:"product_id"`
 }

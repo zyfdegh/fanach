@@ -41,3 +41,9 @@ type RespGetProducts struct {
 	Resp
 	Products []Product `json:"products,omitempty"`
 }
+
+// RespPostOrder is the response to POST /orders
+type RespPostOrder struct {
+	Resp
+	Order Order `json:"order,omitempty"`
+}

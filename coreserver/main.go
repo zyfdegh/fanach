@@ -33,6 +33,8 @@ func newCoreServer() *iris.Framework {
 
 	ir.Get("/prods", api.GetProducts)
 
+	ir.Post("/orders", api.CreateOrder)
+
 	// save sessions to LevelDB(with GC)
 	// import "gopkg.in/kataras/iris.v6/adaptors/sessions"
 	// import "github.com/kataras/go-sessions/sessiondb/leveldb"
